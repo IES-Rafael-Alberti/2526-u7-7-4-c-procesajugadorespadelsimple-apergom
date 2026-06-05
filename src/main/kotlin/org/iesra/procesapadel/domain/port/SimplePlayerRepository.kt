@@ -2,7 +2,6 @@ package org.iesra.procesapadel.domain.port
 
 import java.io.File
 import java.nio.file.Path
-import kotlin.io.path.listDirectoryEntries
 
 class SimplePlayerRepository {
 
@@ -16,9 +15,4 @@ class SimplePlayerRepository {
         }
         return archivos
     }
-
-    fun moveToProcessed(file: File) {
-
-    }
-
 }

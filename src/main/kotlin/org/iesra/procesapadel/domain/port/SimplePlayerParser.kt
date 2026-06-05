@@ -1,12 +1,13 @@
 package org.iesra.procesapadel.domain.port
 
 import org.iesra.procesapadel.domain.model.Player
-import java.nio.file.Path
-import kotlin.io.path.readLines
+import org.iesra.procesapadel.domain.model.PlayerFile
+
+import kotlin.toString
 
 class SimplePlayerParser {
-    fun parse(path: Path): Player? {
-        val lineas = path.readLines()
+    fun parse(file: PlayerFile): Player? {
+        val lineas = PlayerFile.toString()
         val player= Player()
 
         lineas.forEach { lineaLambda ->

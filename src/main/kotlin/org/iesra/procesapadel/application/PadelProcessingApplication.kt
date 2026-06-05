@@ -49,10 +49,9 @@ class PadelProcessingApplication {
         // 3. Recorrer cada fichero y delegar el parseo en un objeto parser.
         // Esto es un metodo: procesaFichero(inputFile, players, issues)
         for (file in inputFiles) {
-             val player = parser.parse(file as Path)
+             val player = parser.parse(file)
              if (player == null) {issues.add(FileIssue("" ,"Error al analizar al jugador"))}
                 else{ players.add(player)}
-            repository.moveToProcessed(file)
 
 
         // }
