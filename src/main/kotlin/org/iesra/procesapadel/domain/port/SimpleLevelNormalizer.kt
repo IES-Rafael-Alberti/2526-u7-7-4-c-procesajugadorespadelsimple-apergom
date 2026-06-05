@@ -8,7 +8,16 @@ class SimpleLevelNormalizer {
         if ((player.nivel != "iniciación") || (player.nivel != "intermedio") || (player.nivel != "experto")) {
 
         } else {
+
             if (player.nivel == "iniciación"){
+                player.nivel = player.nivel.uppercase(getDefault())
+            }
+
+            else if (player.nivel == "intermedio"){
+                player.nivel = player.nivel.uppercase(getDefault())
+            }
+
+            else if (player.nivel == "experto"){
                 player.nivel = player.nivel.uppercase(getDefault())
             }
         }
