@@ -3,11 +3,9 @@ package org.iesra.procesapadel.application
 import org.iesra.procesapadel.cli.CliOptions
 import org.iesra.procesapadel.domain.model.FileIssue
 import org.iesra.procesapadel.domain.model.Player
-import org.iesra.procesapadel.domain.model.PlayerFile
 import org.iesra.procesapadel.domain.port.SimpleLevelNormalizer
 import org.iesra.procesapadel.domain.port.SimplePlayerParser
 import org.iesra.procesapadel.domain.port.SimplePlayerRepository
-import java.nio.file.Path
 
 /**
  * Coordina el caso de uso principal del programa.

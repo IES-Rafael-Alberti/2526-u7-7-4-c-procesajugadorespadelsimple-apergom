@@ -2,19 +2,17 @@ package org.iesra.procesapadel.domain.port
 
 import org.iesra.procesapadel.domain.model.Player
 import org.iesra.procesapadel.domain.model.PlayerFile
-
-import kotlin.toString
+import java.nio.file.Files
 
 class SimplePlayerParser {
     fun parse(file: PlayerFile): Player? {
-        val lineas = PlayerFile.toString()
+        val lineas = Files.readAllLines(file.path).map { line -> line.trim() }
         val player= Player()
 
         lineas.forEach { lineaLambda ->
             val linea = lineaLambda.trim()
             if (!linea.contains("Nombre:") || !linea.contains("Apellidos:") || !linea.contains("Nivel:") || !linea.contains(
-                    "Horario="
-                )
+                    "Horario=")
             ) {
                 return null
             } else {

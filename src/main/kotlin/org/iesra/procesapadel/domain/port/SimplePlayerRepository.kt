@@ -1,18 +1,16 @@
 package org.iesra.procesapadel.domain.port
 
-import java.io.File
+import org.iesra.procesapadel.domain.model.PlayerFile
+
+import java.nio.file.Files
 import java.nio.file.Path
+import kotlin.io.path.listDirectoryEntries
 
 class SimplePlayerRepository {
 
-    fun findInputFiles(path: Path): List<File> {
-        val carpeta = path.toFile().listFiles() ?: return emptyList()
-        val archivos = mutableListOf<File>()
-        for (file in carpeta) {
-            if (file.isFile) {
-                archivos.add(file)
-            }
-        }
-        return archivos
+    fun findInputFiles(path: Path): List<PlayerFile> {
+        if (!Files.exists(path) || !Files.isDirectory(path)) return emptyList()
+
+        return path.listDirectoryEntries("*.txt").map { PlayerFile(it) }
     }
 }
