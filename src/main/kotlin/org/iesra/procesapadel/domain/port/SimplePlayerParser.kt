@@ -6,32 +6,46 @@ import java.nio.file.Files
 
 class SimplePlayerParser {
     fun parse(file: PlayerFile): Player? {
-        val lineas = Files.readAllLines(file.path).map { line -> line.trim() }
-        var player = Player()
-        lineas.forEach { lineaLambda ->
-            val linea = lineaLambda.trim()
+        val lineas = Files.readAllLines(file.path).map { it.trim() }
+
+        val player = Player("", "", "", "")
+
+        for (linea in lineas) {
             println("lineaLambda: $linea")
 
-            if (!linea.contains("Nombre:") && !linea.contains("Apellidos:") && !linea.contains("Nivel:") && !linea.contains(
-                    "Horario=")
-            ) {
-                return null
-            } else {
-                if (linea.contains("Nombre:")) {
-                    val partes = linea.split(":")
+            when {
+                linea.startsWith("Nombre:") -> {
+                    val partes = linea.split(":", limit = 2)
+                    if (partes.size < 2) return null
                     player.nombre = partes[1].trim()
-                } else if (linea.contains("Apellidos:")) {
-                    val partes = linea.split(":")
+                }
+
+                linea.startsWith("Apellidos:") -> {
+                    val partes = linea.split(":", limit = 2)
+                    if (partes.size < 2) return null
                     player.apellidos = partes[1].trim()
-                } else if (linea.contains("Nivel:")) {
-                    val partes = linea.split(":")
+                }
+
+                linea.startsWith("Nivel:") -> {
+                    val partes = linea.split(":", limit = 2)
+                    if (partes.size < 2) return null
                     player.nivel = partes[1].trim()
-                } else if (linea.contains("Horario")) {
-                    val partes = linea.split("=")
+                }
+
+                linea.startsWith("Horario") -> {
+                    val partes = linea.split("=", limit = 2)
+                    if (partes.size < 2) return null
                     player.horario = partes[1].trim()
                 }
+
             }
         }
-        return player
+        return if (
+            player.nombre.isNotBlank() &&
+            player.apellidos.isNotBlank() &&
+            player.nivel.isNotBlank() &&
+            player.horario.isNotBlank()
+        ) player else null
     }
 }
+

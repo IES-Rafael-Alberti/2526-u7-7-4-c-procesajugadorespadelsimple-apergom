@@ -1,0 +1,4 @@
+Nombre: Nicolás
+Apellidos: Vega Romero
+Nivel: avanzado
+Horario = tarde

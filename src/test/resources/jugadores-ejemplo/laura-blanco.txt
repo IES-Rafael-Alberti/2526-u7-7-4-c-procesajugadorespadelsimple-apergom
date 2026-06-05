@@ -1,0 +1,4 @@
+Nombre: Laura
+Apellidos: Blanco Díaz
+Nivel: iniciación
+Horario = tarde

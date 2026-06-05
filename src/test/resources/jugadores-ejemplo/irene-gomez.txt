@@ -1,0 +1,4 @@
+Nombre: Irene
+Apellidos: Gómez Solís
+Nivel: iniciación
+Horario = mañana
