@@ -1,6 +1,9 @@
 package org.iesra.procesapadel.application
 
 import org.iesra.procesapadel.cli.CliOptions
+import org.iesra.procesapadel.domain.model.FileIssue
+import org.iesra.procesapadel.domain.model.Player
+import org.iesra.procesapadel.domain.port.SimplePlayerRepository
 
 /**
  * Coordina el caso de uso principal del programa.
@@ -29,11 +32,12 @@ class PadelProcessingApplication {
         // ####################### Entrada: Lectura de datos, conversión a estructuras
 
         // 1. Pedir a una clase repositorio que localice los `.txt` de entrada.
-        // val inputFiles = playerFileRepository.findInputFiles(options.path)
+        val repository = SimplePlayerRepository()
+        val inputFiles = SimplePlayerRepository.findInputFiles(options.path)
 
         // 2. Crear colecciones donde guardar jugadores válidos e incidencias.
-        // val players = mutableListOf<Player>()
-        // val issues = mutableListOf<FileIssue>()
+        val players = mutableListOf<Player>()
+        val issues = mutableListOf<FileIssue>()
 
         // 3. Recorrer cada fichero y delegar el parseo en un objeto parser.
         // Esto es un metodo: procesaFichero(inputFile, players, issues)
