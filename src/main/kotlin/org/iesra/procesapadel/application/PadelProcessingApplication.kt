@@ -1,6 +1,16 @@
 package org.iesra.procesapadel.application
 
 import org.iesra.procesapadel.cli.CliOptions
+import org.iesra.procesapadel.domain.model.FileIssue
+import org.iesra.procesapadel.domain.model.Player
+import org.iesra.procesapadel.domain.model.ProcessingSummary
+import org.iesra.procesapadel.domain.port.SimpleLevelNormalizer
+import org.iesra.procesapadel.domain.port.SimpleMatchScheduler
+import org.iesra.procesapadel.domain.port.SimpleOutputWriter
+import org.iesra.procesapadel.domain.port.SimplePairMaker
+import org.iesra.procesapadel.domain.port.SimplePlayerParser
+import org.iesra.procesapadel.domain.port.SimplePlayerRepository
+import org.iesra.procesapadel.domain.port.SimpleSummaryPrinter
 
 /**
  * Coordina el caso de uso principal del programa.
@@ -29,69 +39,89 @@ class PadelProcessingApplication {
         // ####################### Entrada: Lectura de datos, conversión a estructuras
 
         // 1. Pedir a una clase repositorio que localice los `.txt` de entrada.
-        // val inputFiles = playerFileRepository.findInputFiles(options.path)
+
+        val repository = SimplePlayerRepository()
+        val parser = SimplePlayerParser()
+        val normalizer = SimpleLevelNormalizer()
+        val pairMaker = SimplePairMaker()
+        val outputWriter = SimpleOutputWriter()
+        val matchScheduler = SimpleMatchScheduler()
+        val summaryPrinter = SimpleSummaryPrinter()
+        val inputFiles = repository.findInputFiles(options.path)
+
 
         // 2. Crear colecciones donde guardar jugadores válidos e incidencias.
-        // val players = mutableListOf<Player>()
-        // val issues = mutableListOf<FileIssue>()
+
+        val players = mutableListOf<Player>()
+        val issues = mutableListOf<FileIssue>()
 
         // 3. Recorrer cada fichero y delegar el parseo en un objeto parser.
         // Esto es un metodo: procesaFichero(inputFile, players, issues)
-        // for (file in inputFiles) {
-        //     val player = playerParser.parse(file)
-        //     ...
-               // 4. Si el parser detecta errores, guardar incidencias.
-               // issues.add(FileIssue(...))
+        println("##################### Ficheros a leer: " + inputFiles.size)
 
-               // 5. Si el parser obtiene un jugador correcto, guardarlo como objeto `Player`.
-               // players.add(player)
-
-               // 6. Delegar el movimiento a `procesados` a un repositorio o gestor de ficheros.
-               // playerFileRepository.moveToProcessed(file)
-
-
-        // }
+        for (file in inputFiles) {
+            val player = parser.parse(file)
+            println(player)
+            if (player == null) {
+                issues.add(FileIssue(file.path.fileName.toString(), "Error al analizar al jugador"))
+            } else {
+                players.add(player)
+                normalizer.normalize(player)
+            }
+            repository.moveToProcessed(file)
+        }
 
         // ####################### Procesamiento: de datos de entrada, y generación de datos de salida
 
-        // Otro método: procesaJugadores(players)
-        // 7. Para cada Player, calcular su nivel normalizado y validar su disponibilidad.
-        // val normalizedLevel = levelNormalizer.normalize(player)
 
+        println("Jugadors leidos: "+players.size)
         // 8. Delegar la creación de parejas equilibradas a una clase especializada.
-        // val pairs = pairMaker.createPairs(players)
+        val pairs = pairMaker.createPairs(players)
 
+        println("parejas creadas: " +pairs.pairs.size)
         // 9. Delegar la generación de partidos evitando repetir horarios.
-        // val matches = matchScheduler.createMatches(pairs, options.tournament)
+        val matches = matchScheduler.createMatches(pairs.pairs)
+
+        println("partidos creados: " + matches.matches.size)
 
         // ####################### Salida: ficheros de salida y resumen
 
         // 10. Delegar la escritura de ficheros de salida a un escritor.
-        // outputWriter.writePairs(...)
-        // outputWriter.writeMatches(...)
+        println("llamada a writePariss*************************** ")
+        outputWriter.writePairs(options.tournament, options.path, pairs.pairs)
+        println("llamada a writeMatches*************************")
+        outputWriter.writeMatches(options.tournament, options.path, matches.matches)
 
 
         // 11. Finalmente, construir un resumen y mostrarlo por consola.
-        // val summary = ProcessingSummary(...)
-        // summaryPrinter.print(summary)
+        val summary = ProcessingSummary(
+            detectedFiles = inputFiles.size,
+            validPlayers = players.size,
+            issues = issues + pairs.issues + matches.issues
+        )
+        summaryPrinter.print(summary)
 
-        printSuggestedDesign()
+        // printSuggestedDesign()
     }
 
-    /**
-     * Muestra por consola una posible descomposición del problema en objetos.
-     *
-     * Esta salida sirve como orientación y no forma parte de la solución final.
-     */
-    private fun printSuggestedDesign() {
-        println()
-        println("Sugerencia de diseño orientado a objetos:")
-        println("- PlayerFileRepository: localiza, lee y mueve ficheros.")
-        println("- PlayerParser: convierte un fichero en un objeto Player.")
-        println("- LevelNormalizer: convierte el nivel textual en un valor comparable.")
-        println("- PairMaker: crea parejas equilibradas según nivel y preferencia.")
-        println("- MatchScheduler: genera partidos entre parejas y horarios disponibles.")
-        println("- OutputWriter: escribe los ficheros CSV y TXT.")
-        println("- SummaryPrinter: muestra el resumen final.")
-    }
 }
+
+
+/**
+ * Muestra por consola una posible descomposición del problema en objetos.
+ *
+ * Esta salida sirve como orientación y no forma parte de la solución final.
+ */
+/** private fun printSuggestedDesign() {
+println()
+println("Sugerencia de diseño orientado a objetos:")
+println("- PlayerFileRepository: localiza, lee y mueve ficheros.")
+println("- PlayerParser: convierte un fichero en un objeto Player.")
+println("- LevelNormalizer: convierte el nivel textual en un valor comparable.")
+println("- PairMaker: crea parejas equilibradas según nivel y preferencia.")
+println("- MatchScheduler: genera partidos entre parejas y horarios disponibles.")
+println("- OutputWriter: escribe los ficheros CSV y TXT.")
+println("- SummaryPrinter: muestra el resumen final.")
+}
+}
+ */

@@ -1,4 +1,0 @@
-Nombre: Clara
-Apellidos: Rojas Méndez
-Nivel: intermedio
-Horario = noche
