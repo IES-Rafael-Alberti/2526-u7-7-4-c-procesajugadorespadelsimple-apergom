@@ -6,12 +6,8 @@ import java.nio.file.Path
 class SimplePlayerRepository {
 
     fun findInputFiles(path: Path): List<File> {
-        val carpeta = (path.toString())
-        if (!carpeta.exists()) {
-            return emptyList()
-        } else {
-            return carpeta.toList()
-        }
+        val carpeta = (path.toFile().listFiles())
+        return carpeta as List<File>
     }
     fun moveToProcessed(file: File) {
 
