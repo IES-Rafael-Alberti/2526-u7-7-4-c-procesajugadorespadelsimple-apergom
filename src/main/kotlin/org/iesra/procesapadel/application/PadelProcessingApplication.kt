@@ -4,6 +4,7 @@ import org.iesra.procesapadel.cli.CliOptions
 import org.iesra.procesapadel.domain.model.FileIssue
 import org.iesra.procesapadel.domain.model.Player
 import org.iesra.procesapadel.domain.port.SimpleLevelNormalizer
+import org.iesra.procesapadel.domain.port.SimpleMatchScheduler
 import org.iesra.procesapadel.domain.port.SimpleOutputWriter
 import org.iesra.procesapadel.domain.port.SimplePairMaker
 import org.iesra.procesapadel.domain.port.SimplePlayerParser
@@ -42,6 +43,7 @@ class PadelProcessingApplication {
         val normalizer = SimpleLevelNormalizer()
         val pairMaker = SimplePairMaker()
         val outputWriter = SimpleOutputWriter()
+        val matchScheduler = SimpleMatchScheduler()
         val inputFiles = repository.findInputFiles(options.path)
 
 
@@ -63,7 +65,7 @@ class PadelProcessingApplication {
                 players.add(player)
                 normalizer.normalize(player)
             }
-            repository.moveToProcessed(file)
+            //repository.moveToProcessed(file)
         }
 
         // ####################### Procesamiento: de datos de entrada, y generación de datos de salida
@@ -75,14 +77,17 @@ class PadelProcessingApplication {
 
         println("parejas creadas: " +pairs.pairs.size)
         // 9. Delegar la generación de partidos evitando repetir horarios.
-        // val matches = matchScheduler.createMatches(pairs, options.tournament)
+        val matches = matchScheduler.createMatches(pairs.pairs, options.tournament)
+
+        println("partidos creados: " + matches.matches.size)
 
         // ####################### Salida: ficheros de salida y resumen
 
         // 10. Delegar la escritura de ficheros de salida a un escritor.
         println("llamada a writePariss*************************** ")
         outputWriter.writePairs(options.tournament, options.path, pairs.pairs)
-
+        println("llamada a writeMatches*************************")
+        outputWriter.writeMatches(options.tournament, options.path, matches.matches)
 
 
         // 11. Finalmente, construir un resumen y mostrarlo por consola.

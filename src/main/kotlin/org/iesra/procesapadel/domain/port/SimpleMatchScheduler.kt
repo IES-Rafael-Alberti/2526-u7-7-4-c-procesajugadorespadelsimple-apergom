@@ -6,7 +6,7 @@ import org.iesra.procesapadel.domain.model.MatchResult
 import org.iesra.procesapadel.domain.model.Pair
 
 class SimpleMatchScheduler {
-    fun createMatches(pairs: List<Pair>): MatchResult {
+    fun createMatches(pairs: List<Pair>, torneo: String): MatchResult {
         val matches = mutableListOf<Match>()
         val issues = mutableListOf<FileIssue>()
 
@@ -48,7 +48,7 @@ class SimpleMatchScheduler {
                 )
             }
         }
-
+         println("partidos dentro de createmathces" + matches.size)
          return MatchResult(matches = matches, issues = issues)
     }
 }
