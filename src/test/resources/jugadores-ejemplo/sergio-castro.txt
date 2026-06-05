@@ -1,4 +1,0 @@
-Nombre: Sergio
-Apellidos: Castro Ríos
-Nivel: intermedio
-Horario = tarde

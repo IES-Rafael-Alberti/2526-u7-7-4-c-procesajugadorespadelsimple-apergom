@@ -1,4 +1,0 @@
-Nombre: Elena
-Apellidos: Martín Gil
-Nivel: intermedio
-Horario = tarde

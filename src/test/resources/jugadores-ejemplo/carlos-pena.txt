@@ -1,4 +1,0 @@
-Nombre: Carlos
-Apellidos: Peña Mora
-Nivel: iniciación
-Horario = mañana

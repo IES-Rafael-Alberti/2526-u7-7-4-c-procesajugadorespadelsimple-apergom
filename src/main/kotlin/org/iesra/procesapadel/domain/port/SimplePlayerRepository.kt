@@ -4,6 +4,7 @@ import org.iesra.procesapadel.domain.model.PlayerFile
 
 import java.nio.file.Files
 import java.nio.file.Path
+import kotlin.io.path.isRegularFile
 import kotlin.io.path.listDirectoryEntries
 
 class SimplePlayerRepository {
@@ -11,7 +12,10 @@ class SimplePlayerRepository {
     fun findInputFiles(path: Path): List<PlayerFile> {
         if (!Files.exists(path) || !Files.isDirectory(path)) return emptyList()
 
-        return path.listDirectoryEntries("*.txt").map { PlayerFile(it) }
+        return path.listDirectoryEntries("*.txt").filter { it.isRegularFile() }
+            .sortedBy { it.fileName.toString() }
+            .map { PlayerFile(it) }
+
     }
 
     fun moveToProcessed(input: PlayerFile): Path {

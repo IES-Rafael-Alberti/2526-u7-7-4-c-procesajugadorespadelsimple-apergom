@@ -1,4 +1,0 @@
-Nombre: Lucía
-Apellidos: Navarro Soto
-Nivel: experto
-Horario = mañana

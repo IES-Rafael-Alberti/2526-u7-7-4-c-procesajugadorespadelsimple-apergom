@@ -1,4 +1,0 @@
-Nombre: Pablo
-Apellidos: Torres Díaz
-Nivel: avanzado
-Horario = tarde

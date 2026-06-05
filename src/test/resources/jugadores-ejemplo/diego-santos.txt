@@ -1,4 +1,0 @@
-Nombre: Diego
-Apellidos: Santos Vera
-Nivel: iniciación
-Horario = tarde
