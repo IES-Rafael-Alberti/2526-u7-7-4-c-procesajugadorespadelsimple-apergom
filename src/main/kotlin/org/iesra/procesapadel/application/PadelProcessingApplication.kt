@@ -63,7 +63,7 @@ class PadelProcessingApplication {
                 players.add(player)
                 normalizer.normalize(player)
             }
-            //repository.moveToProcessed(file)
+            repository.moveToProcessed(file)
         }
 
         // ####################### Procesamiento: de datos de entrada, y generación de datos de salida
@@ -83,7 +83,6 @@ class PadelProcessingApplication {
         println("llamada a writePariss*************************** ")
         outputWriter.writePairs(options.tournament, options.path, pairs.pairs)
 
-        // outputWriter.writeMatches(...)
 
 
         // 11. Finalmente, construir un resumen y mostrarlo por consola.
