@@ -47,7 +47,6 @@ class PadelProcessingApplication {
              val player = SimplePlayerParser.parse(file)
              if (player == null) {issues.add(FileIssue( "",""))}
                 else{ players.add(player)}
-
             SimplePlayerRepository.moveToProcessed(file)
 
 
