@@ -3,8 +3,11 @@ package org.iesra.procesapadel.application
 import org.iesra.procesapadel.cli.CliOptions
 import org.iesra.procesapadel.domain.model.FileIssue
 import org.iesra.procesapadel.domain.model.Player
+import org.iesra.procesapadel.domain.model.PlayerFile
+import org.iesra.procesapadel.domain.port.SimpleLevelNormalizer
 import org.iesra.procesapadel.domain.port.SimplePlayerParser
 import org.iesra.procesapadel.domain.port.SimplePlayerRepository
+import java.nio.file.Path
 
 /**
  * Coordina el caso de uso principal del programa.
@@ -35,7 +38,9 @@ class PadelProcessingApplication {
         // 1. Pedir a una clase repositorio que localice los `.txt` de entrada.
         val repository = SimplePlayerRepository()
         val parser = SimplePlayerParser()
-        val inputFiles = SimplePlayerRepository.findInputFiles(options.path)
+        val normalizer = SimpleLevelNormalizer()
+        val inputFiles = repository.findInputFiles(options.path)
+
 
         // 2. Crear colecciones donde guardar jugadores válidos e incidencias.
         val players = mutableListOf<Player>()
@@ -44,19 +49,19 @@ class PadelProcessingApplication {
         // 3. Recorrer cada fichero y delegar el parseo en un objeto parser.
         // Esto es un metodo: procesaFichero(inputFile, players, issues)
         for (file in inputFiles) {
-             val player = SimplePlayerParser.parse(file)
+             val player = parser.parse(file as Path)
              if (player == null) {issues.add(FileIssue( "",""))}
-                else{ players.add(player)}
-            SimplePlayerRepository.moveToProcessed(file)
+                else{ players.add(player as Player)}
+            repository.moveToProcessed(file)
 
 
         // }
 
         // ####################### Procesamiento: de datos de entrada, y generación de datos de salida
 
-        // Otro método: procesaJugadores(players)
-        // 7. Para cada Player, calcular su nivel normalizado y validar su disponibilidad.
-        // val normalizedLevel = levelNormalizer.normalize(player)
+        players.forEach { player ->
+            val normalizedLevel = normalizer.normalize(player)
+        }
 
         // 8. Delegar la creación de parejas equilibradas a una clase especializada.
         // val pairs = pairMaker.createPairs(players)
@@ -75,15 +80,18 @@ class PadelProcessingApplication {
         // val summary = ProcessingSummary(...)
         // summaryPrinter.print(summary)
 
-        printSuggestedDesign()
+        // printSuggestedDesign()
     }
+
+    }
+}
 
     /**
      * Muestra por consola una posible descomposición del problema en objetos.
      *
      * Esta salida sirve como orientación y no forma parte de la solución final.
      */
-    private fun printSuggestedDesign() {
+   /** private fun printSuggestedDesign() {
         println()
         println("Sugerencia de diseño orientado a objetos:")
         println("- PlayerFileRepository: localiza, lee y mueve ficheros.")
@@ -95,3 +103,4 @@ class PadelProcessingApplication {
         println("- SummaryPrinter: muestra el resumen final.")
     }
 }
+*/

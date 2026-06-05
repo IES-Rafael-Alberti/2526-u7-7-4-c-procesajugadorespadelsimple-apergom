@@ -1,9 +1,6 @@
 package org.iesra.procesapadel.domain.port
 
-import org.iesra.procesapadel.domain.model.FileIssue
 import org.iesra.procesapadel.domain.model.Player
-import org.iesra.procesapadel.domain.model.PlayerFile
-
 import java.nio.file.Path
 import kotlin.io.path.readLines
 
@@ -34,7 +31,6 @@ class SimplePlayerParser {
                     player.horario = partes[2]
                 }
             }
-            return player
-        }
+        }; return player
     }
 }
