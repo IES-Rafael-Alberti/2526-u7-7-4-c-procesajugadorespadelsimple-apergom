@@ -3,6 +3,7 @@ package org.iesra.procesapadel.application
 import org.iesra.procesapadel.cli.CliOptions
 import org.iesra.procesapadel.domain.model.FileIssue
 import org.iesra.procesapadel.domain.model.Player
+import org.iesra.procesapadel.domain.port.SimplePlayerParser
 import org.iesra.procesapadel.domain.port.SimplePlayerRepository
 
 /**
@@ -41,8 +42,8 @@ class PadelProcessingApplication {
 
         // 3. Recorrer cada fichero y delegar el parseo en un objeto parser.
         // Esto es un metodo: procesaFichero(inputFile, players, issues)
-        // for (file in inputFiles) {
-        //     val player = playerParser.parse(file)
+        for (file in inputFiles) {
+             val player = SimplePlayerParser.parse(file)
         //     ...
                // 4. Si el parser detecta errores, guardar incidencias.
                // issues.add(FileIssue(...))

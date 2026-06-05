@@ -9,9 +9,8 @@ class SimplePlayerRepository {
         val carpeta = (path.toString())
         if (!carpeta.exists()) {
             return emptyList()
-        }
-        else {
-
+        } else {
+            return carpeta.toList()
         }
     }
 }
