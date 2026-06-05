@@ -80,7 +80,7 @@ class PadelProcessingApplication {
 
         println("parejas creadas: " +pairs.pairs.size)
         // 9. Delegar la generación de partidos evitando repetir horarios.
-        val matches = matchScheduler.createMatches(pairs.pairs, options.tournament)
+        val matches = matchScheduler.createMatches(pairs.pairs)
 
         println("partidos creados: " + matches.matches.size)
 

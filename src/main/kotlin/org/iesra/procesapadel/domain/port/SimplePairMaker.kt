@@ -1,41 +1,59 @@
 package org.iesra.procesapadel.domain.port
 
 import org.iesra.procesapadel.domain.model.FileIssue
-import org.iesra.procesapadel.domain.model.Player
 import org.iesra.procesapadel.domain.model.Pair
+import org.iesra.procesapadel.domain.model.Player
 import org.iesra.procesapadel.domain.model.Result
-import kotlin.collections.mutableMapOf
 
 class SimplePairMaker {
-    private fun inc(counters: MutableMap<String, MutableMap<String, Int>>, nivel: String, horario: String) {
-        val porNivel = counters.getOrPut(nivel) { mutableMapOf("mañana" to 0, "tarde" to 0) }
+
+    private fun contarPorFranja(counters: MutableMap<String, MutableMap<String, Int>>, nivel: String, horario: String) {
+        val porNivel = counters.getOrPut(nivel) {
+            mutableMapOf("mañana" to 0, "tarde" to 0)
+        }
         porNivel[horario] = (porNivel[horario] ?: 0) + 1
     }
 
-    private fun escogerPorMenor(counters: MutableMap<String, MutableMap<String, Int>>, nivel: String): String {
-        val porNivel = counters.getOrPut(nivel) { mutableMapOf("mañana" to 0, "tarde" to 0) }
-        val m = porNivel["mañana"] ?: 0
-        val t = porNivel["tarde"] ?: 0
-        return if (m <= t) "mañana" else "tarde"
+    private fun menorFranja(counters: MutableMap<String, MutableMap<String, Int>>, nivel: String): String {
+        val porNivel = counters.getOrPut(nivel) {
+            mutableMapOf("mañana" to 0, "tarde" to 0)
+        }
+
+        val manana = porNivel["mañana"] ?: 0
+        val tarde = porNivel["tarde"] ?: 0
+
+        return if (manana <= tarde) "mañana" else "tarde"
     }
 
-    private fun computarHorario(counters: MutableMap<String, MutableMap<String, Int>>, level: String, a: Player, b: Player): String {
-        val ha = a.horario
-        val hb = b.horario
+    private fun calcularHorario(
+        counters: MutableMap<String, MutableMap<String, Int>>,
+        nivel: String,
+        p1: Player,
+        p2: Player
+    ): String {
+        val h1 = p1.horario
+        val h2 = p2.horario
 
-        if (ha == hb) return ha
-        if (ha == "indiferente" && hb != "indiferente") return hb
-        if (hb == "indiferente" && ha != "indiferente") return ha
+        if (h1 == h2) return h1
 
-        return escogerPorMenor(counters, level)
+        if (h1 == "indiferente" && (h2 == "mañana" || h2 == "tarde")) return h2
+        if (h2 == "indiferente" && (h1 == "mañana" || h1 == "tarde")) return h1
+
+        if (h1 == "indiferente" && h2 == "indiferente") {
+            return menorFranja(counters, nivel)
+        }
+
+        if ((h1 == "mañana" && h2 == "tarde") || (h1 == "tarde" && h2 == "mañana")) {
+            return menorFranja(counters, nivel)
+        }
+
+        return menorFranja(counters, nivel)
     }
 
     fun createPairs(players: List<Player>): Result {
         val issues = mutableListOf<FileIssue>()
         val pairs = mutableListOf<Pair>()
-
         val counters = mutableMapOf<String, MutableMap<String, Int>>()
-
 
         val byNivel = players.groupBy { it.nivel }
         val ordenNivel = listOf("INICIACIÓN", "INTERMEDIO", "AVANZADO")
@@ -47,20 +65,23 @@ class SimplePairMaker {
             while (i + 1 < list.size) {
                 val p1 = list[i]
                 val p2 = list[i + 1]
-                val horario = computarHorario(counters, nivel, p1, p2)
 
-                val id = "P${pairs.size + 1}"
+                val horario = calcularHorario(counters, nivel, p1, p2)
+
                 val pair = Pair(
-                    id = id,
+                    id = "P${pairs.size + 1}",
                     player1 = p1,
                     player2 = p2,
                     nivel = nivel,
                     horario = horario
                 )
+
                 pairs.add(pair)
 
-                if (horario == "mañana" || horario == "tarde")
-                    inc(counters, nivel, horario)
+                if (horario == "mañana" || horario == "tarde") {
+                    contarPorFranja(counters, nivel, horario)
+                }
+
                 i += 2
             }
 
@@ -69,12 +90,12 @@ class SimplePairMaker {
                 issues.add(
                     FileIssue(
                         fileName = "jugador ${leftover.nombre} ${leftover.apellidos}",
-                        message = "queda sin pareja en el nivel ${leftover.nivel}.",
+                        message = "queda sin pareja en el nivel ${leftover.nivel}."
                     )
                 )
             }
         }
-        println("Dentro de create pairs :"+pairs.size)
+
         return Result(pairs = pairs, issues = issues)
     }
 }

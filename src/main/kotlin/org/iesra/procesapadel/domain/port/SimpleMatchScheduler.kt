@@ -6,40 +6,33 @@ import org.iesra.procesapadel.domain.model.MatchResult
 import org.iesra.procesapadel.domain.model.Pair
 
 class SimpleMatchScheduler {
-    fun createMatches(pairs: List<Pair>, torneo: String): MatchResult {
+
+    fun createMatches(pairs: List<Pair>): MatchResult {
         val matches = mutableListOf<Match>()
         val issues = mutableListOf<FileIssue>()
 
-        val grupos = mutableMapOf<String, MutableList<Pair>>()
+        val grouped = pairs.groupBy { it.nivel + "-" + it.horario }
 
-        for (pair in pairs) {
-            val clave = "${pair.nivel}-${pair.horario}"
-            if (!grupos.containsKey(clave)) {
-                grupos[clave] = mutableListOf()
-            }
-            grupos[clave]?.add(pair)
-        }
-
-        for ((clave, parejas) in grupos) {
+        for ((_, groupPairs) in grouped) {
             var i = 0
-            while (i + 1 < parejas.size) {
-                val p1 = parejas[i]
-                val p2 = parejas[i + 1]
+            while (i + 1 < groupPairs.size) {
+                val pair1 = groupPairs[i]
+                val pair2 = groupPairs[i + 1]
 
-                val id = "M${matches.size + 1}"
                 val match = Match(
-                    id = id,
-                    pair1 = p1,
-                    pair2 = p2,
-                    nivel = p1.nivel,
-                    horario = p1.horario
+                    id = "M${matches.size + 1}",
+                    pair1 = pair1,
+                    pair2 = pair2,
+                    nivel = pair1.nivel,
+                    horario = pair1.horario
                 )
+
                 matches.add(match)
                 i += 2
             }
 
-            if (parejas.size % 2 != 0) {
-                val leftover = parejas.last()
+            if (groupPairs.size % 2 != 0) {
+                val leftover = groupPairs.last()
                 issues.add(
                     FileIssue(
                         fileName = "pareja ${leftover.id}",
@@ -48,7 +41,7 @@ class SimpleMatchScheduler {
                 )
             }
         }
-         println("partidos dentro de createmathces" + matches.size)
-         return MatchResult(matches = matches, issues = issues)
+
+        return MatchResult(matches = matches, issues = issues)
     }
 }
