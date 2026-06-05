@@ -152,7 +152,8 @@ Incluye:
 - Enlace permanente al código de lectura y validación.
   TODO
 - Descripción del código anterior.
-  El fichero se interpreta desde el repositorio y realiaz una busqueda en el path 
+  El fichero se interpreta desde el repositorio y realiaz una busqueda en el path otorgado en la linea de comandos listando todos los elementos, en este caso archivos que acaban en .txt con el metodo listDirectoriesEntries(), aparte los filtra para saber si son archivos y los mapea ordenados por nombre del archivo.
+  La validación es por la terminación del archivo .txt y comprobacion de que sea un "RegularFile" con ese mismo método.
 - Un ejemplo de error detectado por tu programa y cómo se gestiona.
   TODO
 

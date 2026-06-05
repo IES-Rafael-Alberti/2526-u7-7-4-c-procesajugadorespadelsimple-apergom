@@ -52,32 +52,35 @@ class PadelProcessingApplication {
 
         // 3. Recorrer cada fichero y delegar el parseo en un objeto parser.
         // Esto es un metodo: procesaFichero(inputFile, players, issues)
+        println("##################### Ficheros a leer: " + inputFiles.size)
 
         for (file in inputFiles) {
-             val player = parser.parse(file)
-             if (player == null) {issues.add(FileIssue(file.path.fileName.toString() ,"Error al analizar al jugador"))}
-                else{ players.add(player)
-                 normalizer.normalize(player)}
-
-            repository.moveToProcessed(file)
-
-
-        // }
+            val player = parser.parse(file)
+            println(player)
+            if (player == null) {
+                issues.add(FileIssue(file.path.fileName.toString(), "Error al analizar al jugador"))
+            } else {
+                players.add(player)
+                normalizer.normalize(player)
+            }
+            //repository.moveToProcessed(file)
+        }
 
         // ####################### Procesamiento: de datos de entrada, y generación de datos de salida
 
 
-
+        println("Jugadors leidos: "+players.size)
         // 8. Delegar la creación de parejas equilibradas a una clase especializada.
-            val pairs = pairMaker.createPairs(players)
+        val pairs = pairMaker.createPairs(players)
 
+        println("parejas creadas: " +pairs.pairs.size)
         // 9. Delegar la generación de partidos evitando repetir horarios.
         // val matches = matchScheduler.createMatches(pairs, options.tournament)
 
         // ####################### Salida: ficheros de salida y resumen
 
         // 10. Delegar la escritura de ficheros de salida a un escritor.
-
+        println("llamada a writePariss*************************** ")
         outputWriter.writePairs(options.tournament, options.path, pairs.pairs)
 
         // outputWriter.writeMatches(...)
@@ -90,24 +93,24 @@ class PadelProcessingApplication {
         // printSuggestedDesign()
     }
 
-    }
 }
 
-    /**
-     * Muestra por consola una posible descomposición del problema en objetos.
-     *
-     * Esta salida sirve como orientación y no forma parte de la solución final.
-     */
-   /** private fun printSuggestedDesign() {
-        println()
-        println("Sugerencia de diseño orientado a objetos:")
-        println("- PlayerFileRepository: localiza, lee y mueve ficheros.")
-        println("- PlayerParser: convierte un fichero en un objeto Player.")
-        println("- LevelNormalizer: convierte el nivel textual en un valor comparable.")
-        println("- PairMaker: crea parejas equilibradas según nivel y preferencia.")
-        println("- MatchScheduler: genera partidos entre parejas y horarios disponibles.")
-        println("- OutputWriter: escribe los ficheros CSV y TXT.")
-        println("- SummaryPrinter: muestra el resumen final.")
-    }
+
+/**
+ * Muestra por consola una posible descomposición del problema en objetos.
+ *
+ * Esta salida sirve como orientación y no forma parte de la solución final.
+ */
+/** private fun printSuggestedDesign() {
+println()
+println("Sugerencia de diseño orientado a objetos:")
+println("- PlayerFileRepository: localiza, lee y mueve ficheros.")
+println("- PlayerParser: convierte un fichero en un objeto Player.")
+println("- LevelNormalizer: convierte el nivel textual en un valor comparable.")
+println("- PairMaker: crea parejas equilibradas según nivel y preferencia.")
+println("- MatchScheduler: genera partidos entre parejas y horarios disponibles.")
+println("- OutputWriter: escribe los ficheros CSV y TXT.")
+println("- SummaryPrinter: muestra el resumen final.")
 }
-*/
+}
+ */
