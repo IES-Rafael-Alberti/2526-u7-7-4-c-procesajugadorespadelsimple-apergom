@@ -5,7 +5,5 @@ import org.iesra.procesapadel.domain.model.Player
 class SimpleLevelNormalizer {
     fun normalize(player:Player) {
 
-
-
     }
 }

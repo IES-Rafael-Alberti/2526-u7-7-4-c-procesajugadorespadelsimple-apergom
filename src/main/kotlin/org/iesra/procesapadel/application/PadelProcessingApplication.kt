@@ -50,7 +50,7 @@ class PadelProcessingApplication {
         // Esto es un metodo: procesaFichero(inputFile, players, issues)
         for (file in inputFiles) {
              val player = parser.parse(file as Path)
-             if (player == null) {issues.add(FileIssue( "",""))}
+             if (player == null) {issues.add(FileIssue("" ,"Error al analizar al jugador"))}
                 else{ players.add(player)}
             repository.moveToProcessed(file)
 
