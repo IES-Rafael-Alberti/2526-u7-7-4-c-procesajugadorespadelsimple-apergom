@@ -4,6 +4,8 @@ import org.iesra.procesapadel.cli.CliOptions
 import org.iesra.procesapadel.domain.model.FileIssue
 import org.iesra.procesapadel.domain.model.Player
 import org.iesra.procesapadel.domain.port.SimpleLevelNormalizer
+import org.iesra.procesapadel.domain.port.SimpleOutputWriter
+import org.iesra.procesapadel.domain.port.SimplePairMaker
 import org.iesra.procesapadel.domain.port.SimplePlayerParser
 import org.iesra.procesapadel.domain.port.SimplePlayerRepository
 
@@ -37,6 +39,8 @@ class PadelProcessingApplication {
         val repository = SimplePlayerRepository()
         val parser = SimplePlayerParser()
         val normalizer = SimpleLevelNormalizer()
+        val pairMaker = SimplePairMaker()
+        val outputWriter = SimpleOutputWriter()
         val inputFiles = repository.findInputFiles(options.path)
 
 
@@ -62,7 +66,7 @@ class PadelProcessingApplication {
 
 
         // 8. Delegar la creación de parejas equilibradas a una clase especializada.
-        // val pairs = pairMaker.createPairs(players)
+            val pairs = pairMaker.createPairs(players)
 
         // 9. Delegar la generación de partidos evitando repetir horarios.
         // val matches = matchScheduler.createMatches(pairs, options.tournament)
@@ -70,7 +74,8 @@ class PadelProcessingApplication {
         // ####################### Salida: ficheros de salida y resumen
 
         // 10. Delegar la escritura de ficheros de salida a un escritor.
-        // outputWriter.writePairs(...)
+
+            outputWriter.writePairs(torneo, path, pairs.pairs)
         // outputWriter.writeMatches(...)
 
 
