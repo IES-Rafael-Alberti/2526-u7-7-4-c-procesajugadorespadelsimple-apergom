@@ -51,7 +51,7 @@ class PadelProcessingApplication {
         for (file in inputFiles) {
              val player = parser.parse(file as Path)
              if (player == null) {issues.add(FileIssue( "",""))}
-                else{ players.add(player as Player)}
+                else{ players.add(player)}
             repository.moveToProcessed(file)
 
 
