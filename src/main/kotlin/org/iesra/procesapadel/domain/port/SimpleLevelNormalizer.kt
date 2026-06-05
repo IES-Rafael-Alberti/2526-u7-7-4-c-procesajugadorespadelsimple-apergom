@@ -1,25 +1,17 @@
 package org.iesra.procesapadel.domain.port
 
 import org.iesra.procesapadel.domain.model.Player
-import java.util.Locale.getDefault
+import java.util.Locale
 
 class SimpleLevelNormalizer {
-    fun normalize(player:Player) {
-        if ((player.nivel != "iniciación") || (player.nivel != "intermedio") || (player.nivel != "experto")) {
+    fun normalize(player: Player){
+    player.nivel =
 
-        } else {
-
-            if (player.nivel == "iniciación"){
-                player.nivel = player.nivel.uppercase(getDefault())
-            }
-
-            else if (player.nivel == "intermedio"){
-                player.nivel = player.nivel.uppercase(getDefault())
-            }
-
-            else if (player.nivel == "experto"){
-                player.nivel = player.nivel.uppercase(getDefault())
-            }
-        }
+        when (player.nivel) {
+        "iniciación" -> "INICIACIÓN"
+        "intermedio" -> "INTERMEDIO"
+        "avanzado" -> "AVANZADO"
+        else -> player.nivel.uppercase(Locale.getDefault())
     }
+}
 }

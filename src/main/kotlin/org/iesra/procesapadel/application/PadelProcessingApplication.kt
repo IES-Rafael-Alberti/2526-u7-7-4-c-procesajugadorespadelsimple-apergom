@@ -48,17 +48,18 @@ class PadelProcessingApplication {
         // Esto es un metodo: procesaFichero(inputFile, players, issues)
         for (file in inputFiles) {
              val player = parser.parse(file)
-             if (player == null) {issues.add(FileIssue("" ,"Error al analizar al jugador"))}
-                else{ players.add(player)}
+             if (player == null) {issues.add(FileIssue(file.path.fileName.toString() ,"Error al analizar al jugador"))}
+                else{ players.add(player)
+                 normalizer.normalize(player)}
+
+            repository.moveToProcessed(file)
 
 
         // }
 
         // ####################### Procesamiento: de datos de entrada, y generación de datos de salida
 
-        players.forEach { player ->
-            val normalizedLevel = normalizer.normalize(player)
-        }
+
 
         // 8. Delegar la creación de parejas equilibradas a una clase especializada.
         // val pairs = pairMaker.createPairs(players)

@@ -13,4 +13,12 @@ class SimplePlayerRepository {
 
         return path.listDirectoryEntries("*.txt").map { PlayerFile(it) }
     }
+
+    fun moveToProcessed(input: PlayerFile): Path {
+        val folder = input.path.parent.resolve("procesados")
+        Files.createDirectories(folder)
+
+        val target = folder.resolve(input.path.fileName)
+        return Files.move(input.path, target, java.nio.file.StandardCopyOption.REPLACE_EXISTING)
+    }
 }
