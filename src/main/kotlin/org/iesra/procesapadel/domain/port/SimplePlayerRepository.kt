@@ -13,4 +13,7 @@ class SimplePlayerRepository {
             return carpeta.toList()
         }
     }
+    fun moveToProcessed(file: File) {
+
+    }
 }

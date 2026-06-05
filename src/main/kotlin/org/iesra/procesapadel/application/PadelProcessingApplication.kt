@@ -45,15 +45,10 @@ class PadelProcessingApplication {
         // Esto es un metodo: procesaFichero(inputFile, players, issues)
         for (file in inputFiles) {
              val player = SimplePlayerParser.parse(file)
-        //     ...
-               // 4. Si el parser detecta errores, guardar incidencias.
-               // issues.add(FileIssue(...))
+             if (player == null) {issues.add(FileIssue( "",""))}
+                else{ players.add(player)}
 
-               // 5. Si el parser obtiene un jugador correcto, guardarlo como objeto `Player`.
-               // players.add(player)
-
-               // 6. Delegar el movimiento a `procesados` a un repositorio o gestor de ficheros.
-               // playerFileRepository.moveToProcessed(file)
+            SimplePlayerRepository.moveToProcessed(file)
 
 
         // }
