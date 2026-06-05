@@ -1,18 +1,21 @@
 # ENTREGA
 
-TODO: ¿Quién eres?
+Antonio Manuel Pérez Gómez
 
 > Sustituye cada `TODO` por tu respuesta.
 > Usa enlaces permanentes de GitHub cuando se pidan enlaces al código.
 
 ## Descripción breve de la solución
 
-TODO
+He realizado una solución incompleta de la aplicación, he retirado la generacion de partidos y he realizado solo hasta la escritura en CSV de las parejas y la realizacion de estas. La solución es simple y utiliza la estructura ya otorgada por el profesor e implementa un repositorio para el almacenamiento de los archivos de los jugadores, un parseador que lee estos mismos archivos y los "descuartiza" en varias lineas para facilitar la lectura de todos los jugadores y sus nombres, un normalizador de los niveles para facilitar la lectura de nivel de cada jugador para luego emparejarlos con otra clase , y por ultimo una clase encargada de escribir en un archivo aparte los datos de las parejas realizadas.
 
 ## Ejemplo de ejecución
 
+./gradlew run --args"--torneo <NombreDelTorneo> -- path ./test/resources/jugadores-ejemplo"
+
 ### Fichero de parejas
 
+Debido a que no esta completo el programa no da el archivo de parejas ya que para poder devolverlo es necesario según la lógica que he aplicado
 ```text
 TODO
 ```

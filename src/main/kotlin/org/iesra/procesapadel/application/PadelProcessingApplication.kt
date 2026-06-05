@@ -36,6 +36,7 @@ class PadelProcessingApplication {
         // ####################### Entrada: Lectura de datos, conversión a estructuras
 
         // 1. Pedir a una clase repositorio que localice los `.txt` de entrada.
+
         val repository = SimplePlayerRepository()
         val parser = SimplePlayerParser()
         val normalizer = SimpleLevelNormalizer()
@@ -45,11 +46,13 @@ class PadelProcessingApplication {
 
 
         // 2. Crear colecciones donde guardar jugadores válidos e incidencias.
+
         val players = mutableListOf<Player>()
         val issues = mutableListOf<FileIssue>()
 
         // 3. Recorrer cada fichero y delegar el parseo en un objeto parser.
         // Esto es un metodo: procesaFichero(inputFile, players, issues)
+
         for (file in inputFiles) {
              val player = parser.parse(file)
              if (player == null) {issues.add(FileIssue(file.path.fileName.toString() ,"Error al analizar al jugador"))}
@@ -75,7 +78,8 @@ class PadelProcessingApplication {
 
         // 10. Delegar la escritura de ficheros de salida a un escritor.
 
-            outputWriter.writePairs(torneo, path, pairs.pairs)
+        outputWriter.writePairs(options.tournament, options.path, pairs.pairs)
+
         // outputWriter.writeMatches(...)
 
 
