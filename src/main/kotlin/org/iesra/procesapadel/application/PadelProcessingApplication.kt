@@ -34,6 +34,7 @@ class PadelProcessingApplication {
 
         // 1. Pedir a una clase repositorio que localice los `.txt` de entrada.
         val repository = SimplePlayerRepository()
+        val parser = SimplePlayerParser()
         val inputFiles = SimplePlayerRepository.findInputFiles(options.path)
 
         // 2. Crear colecciones donde guardar jugadores válidos e incidencias.
