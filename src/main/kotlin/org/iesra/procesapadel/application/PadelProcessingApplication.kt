@@ -3,12 +3,14 @@ package org.iesra.procesapadel.application
 import org.iesra.procesapadel.cli.CliOptions
 import org.iesra.procesapadel.domain.model.FileIssue
 import org.iesra.procesapadel.domain.model.Player
+import org.iesra.procesapadel.domain.model.ProcessingSummary
 import org.iesra.procesapadel.domain.port.SimpleLevelNormalizer
 import org.iesra.procesapadel.domain.port.SimpleMatchScheduler
 import org.iesra.procesapadel.domain.port.SimpleOutputWriter
 import org.iesra.procesapadel.domain.port.SimplePairMaker
 import org.iesra.procesapadel.domain.port.SimplePlayerParser
 import org.iesra.procesapadel.domain.port.SimplePlayerRepository
+import org.iesra.procesapadel.domain.port.SimpleSummaryPrinter
 
 /**
  * Coordina el caso de uso principal del programa.
@@ -44,6 +46,7 @@ class PadelProcessingApplication {
         val pairMaker = SimplePairMaker()
         val outputWriter = SimpleOutputWriter()
         val matchScheduler = SimpleMatchScheduler()
+        val summaryPrinter = SimpleSummaryPrinter()
         val inputFiles = repository.findInputFiles(options.path)
 
 
@@ -65,7 +68,7 @@ class PadelProcessingApplication {
                 players.add(player)
                 normalizer.normalize(player)
             }
-            //repository.moveToProcessed(file)
+            repository.moveToProcessed(file)
         }
 
         // ####################### Procesamiento: de datos de entrada, y generación de datos de salida
@@ -91,8 +94,12 @@ class PadelProcessingApplication {
 
 
         // 11. Finalmente, construir un resumen y mostrarlo por consola.
-        // val summary = ProcessingSummary(...)
-        // summaryPrinter.print(summary)
+        val summary = ProcessingSummary(
+            detectedFiles = inputFiles.size,
+            validPlayers = players.size,
+            issues = issues + pairs.issues + matches.issues
+        )
+        summaryPrinter.print(summary)
 
         // printSuggestedDesign()
     }

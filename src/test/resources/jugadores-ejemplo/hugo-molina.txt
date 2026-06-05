@@ -1,4 +1,0 @@
-Nombre: Hugo
-Apellidos: Molina Vega
-Nivel: intermedio
-Horario = tarde
